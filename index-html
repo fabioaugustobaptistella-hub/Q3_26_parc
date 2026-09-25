@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IUNGO Concierge · Análise Trimestral - Grupo Azzas | Jul-Ago-Set/26</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #fafaf9; --surface: #ffffff; --fg: #1a1a19; --muted: #78716c;
+    --border: #e7e5e4; --accent: #059669; --accent-light: #d1fae5; --accent-dark: #047857;
+    --accent-deep: #065f46; --warn: #d97706; --purple: #7c3aed; --purple-light: #ede9fe;
+    --blue: #2563eb; --blue-light: #dbeafe;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--fg); line-height: 1.5; }
+  .page { max-width: 1200px; margin: 0 auto; padding: 32px 24px 60px; }
+
+  .header { margin-bottom: 32px; }
+  .header-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 6px; }
+  .header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+  .header .badge { background: var(--accent-light); color: var(--accent-dark); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+  .header .subtitle { color: var(--muted); font-size: 14px; }
+  .header .meta { display: flex; gap: 14px; margin-top: 10px; font-size: 11px; color: var(--muted); }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+  .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .kpi-card .kpi-label { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .kpi-card .kpi-value { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+  .kpi-card .kpi-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .kpi-card.highlight { background: linear-gradient(135deg, #059669, #047857); border: none; }
+  .kpi-card.highlight .kpi-label, .kpi-card.highlight .kpi-sub { color: rgba(255,255,255,0.85); }
+  .kpi-card.highlight .kpi-value { color: white; }
+  .kpi-card .growth { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-left: 4px; }
+  .kpi-card .growth.up { background: var(--accent-light); color: var(--accent-dark); }
+
+  .section { margin-bottom: 32px; }
+  .section-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .section-header h2 { font-size: 16px; font-weight: 700; }
+  .section-header .section-sub { font-size: 11px; color: var(--muted); }
+
+  .info-box { background: var(--blue-light); border-left: 4px solid var(--blue); border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; font-size: 12px; color: #1e3a8a; }
+  .info-box strong { color: #1e40af; }
+
+  .evolution-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .month-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .month-card .month-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .month-card .month-value { font-size: 20px; font-weight: 800; color: var(--fg); margin-bottom: 4px; }
+  .month-card .month-sub { font-size: 11px; color: var(--muted); }
+
+  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  thead { background: #fafaf9; }
+  th { text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); border-bottom: 1px solid var(--border); }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom: none; }
+  tr.total-row { background: #fafaf9; font-weight: 700; }
+  .iungo-text { color: var(--accent-deep); font-weight: 900; letter-spacing: 0.02em; }
+  .trend-up { color: var(--accent-dark); font-weight: 700; }
+  .trend-down { color: #dc2626; font-weight: 700; }
+
+  .chart-container { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+  .chart-row { display: grid; grid-template-columns: 140px 1fr 80px; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .chart-row:last-child { margin-bottom: 0; }
+  .chart-label { font-size: 12px; font-weight: 600; }
+  .chart-bar-container { display: flex; gap: 4px; align-items: center; }
+  .chart-bar { height: 24px; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: white; font-size: 10px; font-weight: 700; min-width: 40px; }
+  .chart-bar.jul { background: #94a3b8; }
+  .chart-bar.ago { background: #64748b; }
+  .chart-bar.set { background: linear-gradient(90deg, #059669, #10b981); }
+  .chart-growth { font-size: 11px; font-weight: 700; color: var(--accent-dark); text-align: right; }
+
+  .insights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .insight-box { border-radius: 10px; padding: 16px 18px; }
+  .insight-box.good { background: var(--accent-light); border-left: 4px solid var(--accent); }
+  .insight-box.warn { background: #fef3c7; border-left: 4px solid var(--warn); }
+  .insight-box.info { background: var(--blue-light); border-left: 4px solid var(--blue); }
+  .insight-box .insight-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .insight-box.good .insight-title { color: var(--accent-dark); }
+  .insight-box.warn .insight-title { color: #92400e; }
+  .insight-box.info .insight-title { color: #1e40af; }
+  .insight-box p { font-size: 12px; line-height: 1.7; }
+  .insight-box.good p { color: #064e3b; }
+  .insight-box.warn p { color: #78350f; }
+  .insight-box.info p { color: #1e3a8a; }
+  .insight-box strong { font-weight: 700; }
+
+  .footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); text-align: center; }
+
+  @media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .evolution-grid { grid-template-columns: 1fr; }
+    .insights-grid { grid-template-columns: 1fr; }
+    .chart-row { grid-template-columns: 100px 1fr 60px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <h1>IUNGO Concierge · Grupo Azzas 2154</h1>
+        <p class="subtitle">Análise Trimestral — Julho a Setembro/2026</p>
+      </div>
+      <span class="badge">Q3/26 · Análise Completa</span>
+    </div>
+    <div class="meta">
+      <span>📅 Jul (cheio) + Ago (cheio) + Set (01-24/09 parcial)</span>
+      <span>🏷️ 6 marcas</span>
+      <span>📊 GA4 + IUNGO v1.7</span>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>📐 Fórmula de Share IUNGO:</strong> <code>Vendas IUNGO ÷ (Vendas Totais − Vendas IUNGO)</code> — indica a participação do <span class="iungo-text">IUNGO</span> sobre o mercado restante. Quanto maior, melhor o desempenho.
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card highlight">
+      <div class="kpi-label">Faturamento Total <span class="iungo-text">IUNGO</span></div>
+      <div class="kpi-value">R$ 1,96M</div>
+      <div class="kpi-sub">3 meses acumulados</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">GMV Total Grupo</div>
+      <div class="kpi-value">R$ 259,6M</div>
+      <div class="kpi-sub">3 meses acumulados</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Crescimento Share</div>
+      <div class="kpi-value">0,45% → 1,19%</div>
+      <div class="kpi-sub"><span class="growth up">+164%</span> em 3 meses</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Comissão Acumulada</div>
+      <div class="kpi-value">R$ 49.016</div>
+      <div class="kpi-sub">2,5% sobre vendas</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h2>📈 Evolução Mensal</h2>
+      <span class="section-sub">Share geral do grupo · Jul → Ago → Set</span>
+    </div>
+    <div class="evolution-grid">
+      <div class="month-card">
+        <div class="month-label">Julho/26</div>
+        <div class="month-value">R$ 450k</div>
+        <div class="month-sub">Share: 0,45% · GMV: R$ 100M</div>
+      </div>
+      <div class="month-card">
+        <div class="month-label">Agosto/26</div>
+        <div class="month-value">R$ 648k</div>
+        <div class="month-sub">Share: 0,75% · GMV: R$ 86,9M</div>
+      </div>
+      <div class="month-card" style="border-color: var(--accent);">
+        <div class="month-label">Setembro/26 (parcial)</div>
+        <div class="month-value">R$ 862k</div>
+        <div class="month-sub">Share: 1,19% · GMV: R$ 72,7M</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h2>📊 Evolução por Marca</h2>
+      <span class="section-sub">Share IUNGO · Jul → Ago → Set (parcial)</span>
+    </div>
+    <div class="chart-container">
+      <div class="chart-row">
+        <div class="chart-label">MARIA FILÓ ⭐</div>
+        <div class="chart-bar-container">
+          <div class="chart-bar jul" style="width: 53px;">1,33%</div>
+          <div class="chart-bar ago" style="width: 65px;">1,62%</div>
+          <div class="chart-bar set" style="width: 100px;">2,51%</div>
+        </div>
+        <div class="chart-growth">+89%</div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-label">OFF PREMIUM</div>
+        <div class="chart-bar-container">
+          <div class="chart-bar jul" style="width: 71px;">0,98%</div>
+          <div class="chart-bar ago" style="width: 94px;">1,29%</div>
+          <div class="chart-bar set" style="width: 100px;">1,38%</div>
+        </div>
+        <div class="chart-growth">+41%</div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-label">ANIMALE</div>
+        <div class="chart-bar-container">
+          <div class="chart-bar jul" style="width: 43px;">0,56%</div>
+          <div class="chart-bar ago" style="width: 38px;">0,50%</div>
+          <div class="chart-bar set" style="width: 100px;">1,30%</div>
+        </div>
+        <div class="chart-growth">+132%</div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-label">CRIS BARROS</div>
+        <div class="chart-bar-container">
+          <div class="chart-bar jul" style="width: 55px;">0,54%</div>
+          <div class="chart-bar ago" style="width: 73px;">0,72%</div>
+          <div class="chart-bar set" style="width: 100px;">0,98%</div>
+        </div>
+        <div class="chart-growth">+81%</div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-label">FARM</div>
+        <div class="chart-bar-container">
+          <div class="chart-bar jul" style="width: 36px;">0,37%</div>
+          <div class="chart-bar ago" style="width: 77px;">0,79%</div>
+          <div class="chart-bar set" style="width: 100px;">1,03%</div>
+        </div>
+        <div class="chart-growth">+178%</div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-label">FÁBULA</div>
+        <div class="chart-bar-container">
+          <div class="chart-bar jul" style="width: 6px;">0,06%</div>
+          <div class="chart-bar ago" style="width: 11px;">0,12%</div>
+          <div class="chart-bar set" style="width: 100px;">1,05%</div>
+        </div>
+        <div class="chart-growth">+1650%</div>
+      </div>
+    </div>
+    <p style="font-size: 11px; color: var(--muted); margin-top: 8px;">Legenda: <span style="background: #94a3b8; padding: 2px 8px; border-radius: 3px; color: white; font-weight: 700;">Jul</span> <span style="background: #64748b; padding: 2px 8px; border-radius: 3px; color: white; font-weight: 700;">Ago</span> <span style="background: linear-gradient(90deg, #059669, #10b981); padding: 2px 8px; border-radius: 3px; color: white; font-weight: 700;">Set</span></p>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h2>📋 Tabela Comparativa</h2>
+      <span class="section-sub">Evolução trimestre completo</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Marca</th>
+            <th>Jul Share</th>
+            <th>Ago Share</th>
+            <th>Set Share</th>
+            <th>Crescimento</th>
+            <th>Posição Set</th>
+            <th>Tendência</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>MARIA FILÓ ⭐</strong></td>
+            <td>1,33%</td>
+            <td>1,62%</td>
+            <td style="color:var(--accent-dark);font-weight:700;">2,51%</td>
+            <td class="trend-up">+89%</td>
+            <td>9º</td>
+            <td class="trend-up">📈 Consistente</td>
+          </tr>
+          <tr>
+            <td><strong>OFF PREMIUM</strong></td>
+            <td>0,98%</td>
+            <td>1,29%</td>
+            <td>1,38%</td>
+            <td class="trend-up">+41%</td>
+            <td>9º</td>
+            <td class="trend-up">📈 Estável</td>
+          </tr>
+          <tr>
+            <td><strong>ANIMALE</strong></td>
+            <td>0,56%</td>
+            <td>0,50%</td>
+            <td>1,30%</td>
+            <td class="trend-up">+132%</td>
+            <td>6º</td>
+            <td class="trend-up">📈 Recuperando</td>
+          </tr>
+          <tr>
+            <td><strong>CRIS BARROS</strong></td>
+            <td>0,54%</td>
+            <td>0,72%</td>
+            <td>0,98%</td>
+            <td class="trend-up">+81%</td>
+            <td>9º</td>
+            <td class="trend-up">📈 Crescente</td>
+          </tr>
+          <tr>
+            <td><strong>FARM</strong></td>
+            <td>0,37%</td>
+            <td>0,79%</td>
+            <td>1,03%</td>
+            <td class="trend-up">+178%</td>
+            <td>12º</td>
+            <td class="trend-up">📈 Forte</td>
+          </tr>
+          <tr>
+            <td><strong>FÁBULA</strong></td>
+            <td>0,06%</td>
+            <td>0,12%</td>
+            <td>1,05%</td>
+            <td class="trend-up">+1650%</td>
+            <td>9º</td>
+            <td class="trend-up">📈 Explosivo</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>TOTAL GRUPO</strong></td>
+            <td>0,45%</td>
+            <td>0,75%</td>
+            <td><strong>1,19%</strong></td>
+            <td class="trend-up"><strong>+164%</strong></td>
+            <td>—</td>
+            <td class="trend-up">📈 Todas crescendo</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h2>💡 Análise Estratégica</h2>
+    </div>
+    <div class="insights-grid">
+      <div class="insight-box good">
+        <div class="insight-title">✅ Conquistas do Trimestre</div>
+        <p>
+          • <strong>Crescimento generalizado:</strong> todas as 6 marcas aumentaram share — sinal de que a estratégia do <span class="iungo-text">IUNGO</span> está funcionando<br><br>
+          • <strong>FÁBULA:</strong> crescimento explosivo de 1650% (de 0,06% para 1,05%) — saiu de 27º para 9º lugar<br><br>
+          • <strong>MARIA FILÓ:</strong> mantém liderança consistente e atingiu 2,51% — única marca acima de 2%<br><br>
+          • <strong>FARM:</strong> mesmo sendo a maior marca (55% do GMV), cresceu 178% — maior oportunidade de escala<br><br>
+          • <strong>Share geral:</strong> evoluiu de 0,45% para 1,19% (+164%) em apenas 3 meses
+        </p>
+      </div>
+      <div class="insight-box warn">
+        <div class="insight-title">⚠️ Pontos de Atenção</div>
+        <p>
+          • <strong>Share ainda baixo:</strong> 1,19% geral está longe da meta de 2%+ — precisa acelerar<br><br>
+          • <strong>FARM:</strong> representa 55% do GMV mas <span class="iungo-text">IUNGO</span> tem apenas 1,03% de share (12º) — maior gap de escala do grupo<br><br>
+          • <strong>ANIMALE:</strong> teve queda em Agosto (0,56% → 0,50%) antes de recuperar em Setembro — volatilidade<br><br>
+          • <strong>"Não Def. (GA4)":</strong> continua sendo 1º ou 2º canal em todas as marcas — rastreamento subestimado pode estar mascarando o real desempenho<br><br>
+          • <strong>Setembro parcial:</strong> dados até 24/09 — projeção de mês cheio pode mostrar desaceleração
+        </p>
+      </div>
+      <div class="insight-box info" style="grid-column: 1 / -1;">
+        <div class="insight-title">🎯 Recomendações para Q4/26</div>
+        <p>
+          • <strong>Foco em FARM:</strong> maior marca do grupo (R$ 40M+ em Setembro) com share de apenas 1,03% — potencial de R$ 400k+ adicionais se atingir 2%<br><br>
+          • <strong>Manter momentum de FÁBULA:</strong> crescimento explosivo (+1650%) mas base ainda pequena — consolidar ganho antes de buscar mais escala<br><br>
+          • <strong>MARIA FILÓ como case:</strong> única marca acima de 2% — documentar o que funcionou e replicar nas outras<br><br>
+          • <strong>Meta realista Q4:</strong> atingir 2%+ em pelo menos 4 marcas (hoje apenas MARIA FILÓ está acima)<br><br>
+          • <strong>Melhorar rastreamento:</strong> trabalhar com time técnico para reduzir "Não Def. (GA4)" e ter visibilidade real do mercado
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    IUNGO Concierge · Grupo Azzas 2154 · Análise Trimestral Q3/26 (Jul-Ago-Set) · Fórmula: IUNGO ÷ (Total − IUNGO)
+  </div>
+
+</div>
+</body>
+</html>
